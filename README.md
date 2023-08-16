@@ -44,7 +44,7 @@ This project aims to scrape records from PakWheels, clean and pass each record t
 - Replace `your_flask_script.py` with the actual name of your Flask script.
 - Modify the project as needed for your specific use case.
 - Feel free to contribute to this project by opening pull requests.
-
+![Screenshot](Output.png)
 
 
 
