@@ -1,4 +1,5 @@
-from flask import Flask, jsonify, request  # Import the request module
+from flask import Flask, jsonify, request,render_template  # Import the request module
+import requests
 from elasticsearch import Elasticsearch
 import pandas as pd;
 app = Flask(__name__)
@@ -27,8 +28,10 @@ def get_data(index_name):  # Add index_name parameter to the function
         
         # Filter and sort data
         engine_capacity_filter = "660 cc"  # Set the engine capacity filter
-        filtered_df = df[df['engine-capacity'] == engine_capacity_filter]
-        sorted_df = filtered_df.sort_values(by='price', ascending=True)
+        # filtered_df = df[df['engine-capacity'] == engine_capacity_filter]
+        # sorted_df = filtered_df.sort_values(by='price', ascending=True)
+        sorted_df = df.sort_values(by='price', ascending=True)
+        
         
         # Convert the sorted DataFrame to JSON
         sorted_json = sorted_df.to_json(orient='records', default_handler=str)
@@ -36,6 +39,17 @@ def get_data(index_name):  # Add index_name parameter to the function
         return sorted_json, 200
     except Exception as e:
         return jsonify({'error': str(e)}), 404
+@app.route('/')
+def frontend():
+    try:
+        response = requests.get("http://localhost:5000/get_data/pak-string")
+        if response.status_code == 200:
+            data = response.json()
+            return render_template('frontend.html', data=data)
+        else:
+            return "Failed to fetch data from the API"
+    except Exception as e:
+        return "Error fetching data: " + str(e)
 
 if __name__ == '__main__':
     app.run(debug=True)

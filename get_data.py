@@ -1,3 +1,4 @@
+from flask import Flask, render_template
 import requests
 import pandas as pd
 def fetch_data_from_api(index_name):
@@ -8,8 +9,9 @@ def fetch_data_from_api(index_name):
         if response.status_code == 200:
             fetched_data = response.json()
             # print(fetched_data)
-            df = pd.DataFrame(fetched_data)
-            print(df)
+            # df = pd.DataFrame(fetched_data)
+            # print(df)
+            return render_template('frontend.html', data=fetched_data)
             # df['price'] = df['price'].str.replace('PKR', '').str.replace('lacs', '').str.replace(',', '').astype(float)
             # sorted_df = df.sort_values(by='price', ascending=True)
             # filtered_df = df.sort_values(by='engine-capacity', ascending=False)
